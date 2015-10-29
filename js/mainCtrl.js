@@ -30,12 +30,17 @@ app.controller('mainCtrl', function($scope, itunesService){
   //Also note that that method should be retuning a promise, so you could use .then in this function.
     
     //Code here
-
+$scope.getSongDataIn = function() {
+   console.log('here'); itunesService.getArtistData($scope.artist).then(function(response) {
+        $scope.songDataIn = response;
+        songDataSort();
+        console.log(typeof response);
+    });
+}
 
   //Check that the above method is working by entering a name into the input field on your web app, and then console.log the result
 
     //Code here
-
 
   //If everything worked you should see a huge array of objects inside your console. That's great! But unfortunately that's not what ng-grid is expecting. What you need to do now
   //is sort the data you got back to be an object in the following format.
@@ -51,6 +56,28 @@ app.controller('mainCtrl', function($scope, itunesService){
 
     //Code here
 
+var SongObjectMaker = function (albumArtIn, artistIn, collectionIn, collectionPriceIn, playIn, songIn) {
+    
+    this.AlbumArt = albumArtIn;
+    this.Artist = artistIn;
+    this.Collection = collectionIn;
+    this.CollectionPrice = collectionPriceIn;
+    this.Play = playIn;
+    this.Type = songIn;
+}
+
+function songDataSort() {
+    console.log(typeof $scope.songDataIn);
+    var songDataLength = $scope.songDataIn.length;
+    var betterArray = [];
+    $scope.songData = betterArray;
+
+
+    for (var i = 0; i < songDataLength; i++) {
+        $scope.songData.push(new SongObjectMaker($scope.songDataIn[i].artworkUrl30, $scope.songDataIn[i].artistName, $scope.songDataIn[i].collectionName, $scope.songDataIn[i].collectionPrice, $scope.songDataIn[i].previewUrl, $scope.songDataIn[i].kind));
+    }
+}
+    
 
   //Once you have that final data array, you simply need to put it on the scope (or more specifically on the scope as songData). Once you do this ($scope.songData = myFinalArray) then ng-grid will see that and populate the page.
 

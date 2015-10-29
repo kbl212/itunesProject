@@ -11,4 +11,12 @@ app.service('itunesService', function($http, $q){
 
     //Code here
     
+    
+    
+    
+    this.getArtistData = function(artistName) {
+    return    $http.jsonp('https:itunes.apple.com/search?term=' + artistName + '&callback=JSON_CALLBACK').then(function(response){
+        return response.data.results;
+    });
+    }
 });
